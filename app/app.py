@@ -1,7 +1,8 @@
-﻿from flask import Flask, jsonify, request, render_template  # pacotemetodo flask - classe Flask
-
-
+﻿import db
+from flask import Flask, jsonify, request, render_template
 app = Flask(__name__)
+
+db.connect()
 
 playlists = [
     {
