@@ -1,4 +1,4 @@
 SERVER = "localhost"
-DATABASE = "spot"
+DATABASE = "Spot"
 USER = "sa"
 PASSWORD = "sa123"

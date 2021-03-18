@@ -1,21 +1,13 @@
-﻿import db
+﻿from config import SERVER, DATABASE, USER, PASSWORD
 from flask import Flask, jsonify, request, render_template
+import pyodbc
+
 app = Flask(__name__)
 
-db.connect()
+cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+SERVER+';DATABASE='+DATABASE+';UID='+USER+';PWD='+ PASSWORD)
+cursor = cnxn.cursor()
+print("Conectado ao Banco de dados. kkkk")
 
-playlists = [
-    {
-        'name':'Playlist01',
-        'songs': [
-            {
-                'name':'Rap do Gabriel Monteiro',
-                'artist':'Pedro',
-                'time':9
-            }
-        ]
-    }
-]
 
 @app.route('/')
 def home():
@@ -25,30 +17,55 @@ def home():
 # POST /playlist data: {name:}
 @app.route('/playlist', methods=['POST'])
 def createPlaylist():
-    requestData = request.get_json()
-    newPlaylist = {
-        'name': requestData['name'],
-        'songs':[]
-    }
-    playlists.append(newPlaylist)
-    return jsonify(newPlaylist)
+    data = request.get_json()
+    playlist = {'nome': data['nome'], 
+                'descricao': data['descricao']}
 
+    query = "INSERT INTO Playlist (nome, descricao) VALUES (?, ?)"
+    cursor.execute(query, playlist['nome'], playlist['descricao'])
+    cnxn.commit()
 
-# GET /playlist/<string:name>
-@app.route('/playlist/<string:name>')
-def getPlaylist(name):
-    for playlist in playlists:
-        if playlist['name'] == name:
-            return jsonify(playlist)
-    return jsonify({'message':'playlist not found'})
+    return playlist, 201
+    
+
+# GET /playlist/<int:id>
+@app.route('/playlist/<int:id>')
+def getPlaylist(id):
+    query = "SELECT * from Playlist where PLAYLIST_ID=?"
+    row = cursor.execute(query, id).fetchone()
+    if row:
+        return {'nome': row[0], 
+                        'descricao':row[1], 
+                        'PLAYLIST_ID':row[2], 
+                        'data_criacao':row[3], 
+                        'tempo_duracao':row[4]}
+    return {'message': 'Playlist não encontrada'}, 404
 
 
 # GET /playlist
 @app.route('/playlist')
 def getPlaylists():
-    return jsonify({'playlists': playlists})
+    cursor.execute("SELECT * from Playlist")
+    playlists = []
+    for row in cursor.fetchall():
+        playlists.append({'nome': row[0], 
+                        'descricao':row[1], 
+                        'PLAYLIST_ID':row[2], 
+                        'data_criacao':row[3], 
+                        'tempo_duracao':row[4]})
+    return jsonify(playlists)
 
 
+# DELETE /playlist/<int:id>/delete
+@app.route('/playlist/<int:id>/delete', methods=['POST'])
+def deletePlaylist(id):
+    query = "DELETE FROM Playlist WHERE PLAYLIST_ID=?"
+    cursor.execute(query, id)
+    cnxn.commit()
+
+    return {'message':'Playlist deletada'}
+
+"""
 # POST /playlist/<string:name>/songs {name:, time:}
 @app.route('/playlist/<string:name>/songs', methods=['POST'])
 def createSongsInPlaylist(name):
@@ -72,6 +89,8 @@ def getSongsInPlaylist(name):
         if playlist['name'] == name:
             return jsonify({'songs': playlist['songs']})
     return jsonify({'message':'songs not found'})
+
+"""
 
 
 app.run(port=5000)
