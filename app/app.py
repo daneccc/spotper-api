@@ -1,15 +1,21 @@
 ﻿from config import SERVER, DATABASE, USER, PASSWORD
 from flask import Flask, jsonify, request, render_template
 import pyodbc
+from flask_jwt import JWT, jwt_required
+from security import authenticate, identity
+
 
 app = Flask(__name__)
+app.secret_key = 'user'
+
 
 cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+SERVER+';DATABASE='+DATABASE+';UID='+USER+';PWD='+ PASSWORD)
 cursor = cnxn.cursor()
 print("Conectado ao Banco de dados. kkkk")
 
+jwt = JWT(app, authenticate, identity)  # /auth
 
-@app.route('/')
+@app.route('/')  ## mudar depois
 def home():
     return render_template('index.html')
 
@@ -30,6 +36,7 @@ def createPlaylist():
 
 # GET /playlist/<int:id>
 @app.route('/playlist/<int:id>')
+@jwt_required()
 def getPlaylist(id):
     query = "SELECT * from Playlist where PLAYLIST_ID=?"
     row = cursor.execute(query, id).fetchone()
