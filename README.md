@@ -1,14 +1,22 @@
-﻿### Como rodar
-```
+﻿# SpotPer
 
-$ cd Spotper-Api
-$ python3 -m venv venv (Criar Virtual Enviroment)
-$ venv\Scripts\activate (IMPORTANTE)
+## Como rodar
+
+### [IMPORTANTE] Criar um usuario no Sql Server com user 'sa' e senha 'sa123'
+
+```
+$ cd spotper-api
+$ python3 -m venv venv - (Criar Virtual Enviroment)
+$ venv\Scripts\activate - (Ativar Virtual Enviroment)
 $ pip install -r requirements.txt
-(No visual studio)
-Ctrl + p
-Digite Python:Select Interpreter
-Selecione o Virtual Enviroment Criado
 ```
 
-#### Importante: Criar um usuario no Sql Server com user 'sa' e senha 'sa123'
+## Selecionando Virtual Enviroment
+
+```
+[VISUAL STUDIO CODE]
+- Python:Select Interpreter
+- Selecione o Virtual Enviroment Criado
+```
+
+ OBS: Comando para atualizar "requirements.txt": pip freeze > requirements.txt ***
