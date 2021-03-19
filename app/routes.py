@@ -6,28 +6,7 @@ from __main__ import app
 def home():
     return render_template('index.html')
 
-@app.route('/playlist', methods=['POST'])
-def createPlaylist(self, request):
-    data = request.get_json()
-    playlist = {'nome': data['nome'], 
-                'descricao': data['descricao']}
-    query = "INSERT INTO Playlist (nome, descricao) VALUES (?, ?)"
-    cursor.execute(query, playlist['nome'], playlist['descricao'])
-    cnxn.commit()
-
-    return playlist, 201
-
-@app.route('/playlist/<int:id>')    
-def getPlaylist(self, id):
-    query = "SELECT * from Playlist where PLAYLIST_ID=?"
-    row = cursor.execute(query, id).fetchone()
-    if row:
-        return {'nome': row[0], 
-                'descricao':row[1], 
-                'PLAYLIST_ID':row[2], 
-                'data_criacao':row[3], 
-                'tempo_duracao':row[4]}
-    return {'message': 'Playlist não encontrada'}, 404
+# PLAYLIST
 
 @app.route('/playlist')
 def getPlaylists(self):
@@ -41,6 +20,29 @@ def getPlaylists(self):
                         'tempo_duracao':row[4]})
     return jsonify(playlists)
 
+@app.route('/playlist/<int:id>')    
+def getPlaylist(self, id):
+    query = "SELECT * from Playlist where PLAYLIST_ID=?"
+    row = cursor.execute(query, id).fetchone()
+    if row:
+        return {'nome': row[0], 
+                'descricao':row[1], 
+                'PLAYLIST_ID':row[2], 
+                'data_criacao':row[3], 
+                'tempo_duracao':row[4]}
+    return {'message': 'Playlist não encontrada'}, 404
+
+@app.route('/playlist', methods=['POST'])
+def createPlaylist(self, request):
+    data = request.get_json()
+    playlist = {'nome': data['nome'], 
+                'descricao': data['descricao']}
+    query = "INSERT INTO Playlist (nome, descricao) VALUES (?, ?)"
+    cursor.execute(query, playlist['nome'], playlist['descricao'])
+    cnxn.commit()
+
+    return playlist, 201
+
 @app.route('/playlist/<int:id>', methods=['DELETE'])
 def deletePlaylist(self, id):
     query = "DELETE FROM Playlist WHERE PLAYLIST_ID=?"
@@ -48,6 +50,8 @@ def deletePlaylist(self, id):
     cnxn.commit()
 
     return {'message':'Playlist deletada'}
+
+# ALBUM
 
 # GET /album
 @app.route('/album')
@@ -81,6 +85,10 @@ def getAlbum(id):
                     'cod_gravadora':row[7]}
     return {'message':'Álbum não encontrado'}, 404
 
+# GRAVADORA
+
+## TODO: GET /gravadora
+
 # GET /gravadora/<int:id>
 @app.route('/gravadora/<int:id>')
 def getGravadora(id):
@@ -94,7 +102,14 @@ def getGravadora(id):
                     'nome':row[4]}
     return {'message':'Álbum não encontrado'}, 404
 
-# GET /track/<int:id>
+# FAIXA
+
+# TODO: GET: /faixa
+@app.route('/track')
+def getTracks():
+    return
+
+# GET /faixa/<int:id>
 @app.route('/track/<int:id>')
 def getTrack(id):
     query = "SELECT * FROM Faixas WHERE FAIXA_ID=?"
@@ -112,4 +127,102 @@ def getTrack(id):
 
     return {'message':'Faixa não encontrada'}, 404
 
-# POST play track
+# INTERPRETE
+
+# TODO: GET: /interprete
+@app.route('/interprete')
+def getInterprete():
+    return
+
+# TODO: GET /composicao/<int:id>
+@app.route('/interprete/<int:id>')
+def getInterprete(id):
+    return
+
+# COMPOSICAO
+
+# TODO: GET: /composicao
+@app.Composicao('/composicao')
+def getComposicao():
+    return
+
+# TODO: GET /composicao/<int:id>
+@app.route('/composicao/<int:id>')
+def getComposicao(id):
+    return
+
+# PERIODO MUSICAL
+
+# TODO: GET: /periodo
+@app.Periodo('/periodo')
+def getPeriodo():
+    return
+
+# TODO: GET /periodo/<int:id>
+@app.route('/periodo/<int:id>')
+def getPeriodo(id):
+    return
+
+# COMPOSITOR
+
+# TODO: GET: /compositor
+@app.route('/compositor')
+def getCompositor():
+    return
+
+# TODO: GET /compositor/<int:id>
+@app.route('/compositor/<int:id>')
+def getCompositor(id):
+    return
+
+
+# FAIXAS-COMPOSITOR-AUX
+
+# TODO: GET: /faixacompositor
+@app.route('/faixacompositor')
+def getFaixaCompositor():
+    return
+
+# TODO: GET /faixacompositor/<int:id>
+@app.route('/faixacompositor/<int:id>')
+def getFaixaCompositor(id):
+    return
+
+
+# FAIXAS-INTERPRETE-AUX
+
+# TODO: GET: /faixainterprete
+@app.route('/faixainterprete')
+def getFaixasInterprete():
+    return
+
+# TODO: GET /faixainterprete/<int:id>
+@app.route('/faixainterprete/<int:id>')
+def getFaixasInterprete(id_faixa, id_interprete):
+    return
+
+
+# FAIXA-PLAYLIST-AUX ****
+
+# TODO: GET: /faixaplaylist
+@app.route('/faixaplaylist')
+def getFaixaPlaylist():
+    return
+
+# TODO: GET /faixaplaylist/<int:id>
+@app.route('/faixaplaylist/<int:id>')
+def getFaixaPlaylist(id_faixa, id_playlist):
+    return
+
+
+## PROVAVELMENTE SERÃO NECESSARIOS NA MANUTENÇÃO DAS PLAYLISTS:
+
+# TODO: POST /faixaplaylist/<int:id>
+@app.route('/faixaplaylist/<int:id>', methods=['POST'])
+def postFaixaPlaylist(id_faixa, id_playlist):
+    return
+
+# TODO: DELETE /faixaplaylist/<int:id>
+@app.route('/faixaplaylist/<int:id>', methods=['DELETE'])
+def deleteFaixaPlaylist(id_faixa, id_playlist):
+    return
