@@ -88,6 +88,18 @@ def getAlbum(id):
 # GRAVADORA
 
 ## TODO: GET /gravadora
+@app.route('/gravadora')
+def getGravadoras(id):
+    cursor.execute("SELECT * from Gravadora")
+    gravadoras = []
+    for row in cursor.fetchall():
+        gravadoras.append({'GRAVADORA_ID':row[0],
+                        'endereco': row[1], 
+                        'telefone':row[2], 
+                        'site':row[3], 
+                        'nome':row[4]
+                        })
+    return jsonify(gravadoras)
 
 # GET /gravadora/<int:id>
 @app.route('/gravadora/<int:id>')
@@ -131,7 +143,7 @@ def getTrack(id):
 
 # TODO: GET: /interprete
 @app.route('/interprete')
-def getInterprete():
+def getInterpretes():
     return
 
 # TODO: GET /composicao/<int:id>
@@ -142,8 +154,8 @@ def getInterprete(id):
 # COMPOSICAO
 
 # TODO: GET: /composicao
-@app.Composicao('/composicao')
-def getComposicao():
+@app.route('/composicao')
+def getComposicoes():
     return
 
 # TODO: GET /composicao/<int:id>
@@ -154,8 +166,8 @@ def getComposicao(id):
 # PERIODO MUSICAL
 
 # TODO: GET: /periodo
-@app.Periodo('/periodo')
-def getPeriodo():
+@app.route('/periodo')
+def getPeriodos():
     return
 
 # TODO: GET /periodo/<int:id>
@@ -167,7 +179,7 @@ def getPeriodo(id):
 
 # TODO: GET: /compositor
 @app.route('/compositor')
-def getCompositor():
+def getCompositores():
     return
 
 # TODO: GET /compositor/<int:id>
@@ -180,7 +192,7 @@ def getCompositor(id):
 
 # TODO: GET: /faixacompositor
 @app.route('/faixacompositor')
-def getFaixaCompositor():
+def getFaixaCompositores():
     return
 
 # TODO: GET /faixacompositor/<int:id>
@@ -193,7 +205,7 @@ def getFaixaCompositor(id):
 
 # TODO: GET: /faixainterprete
 @app.route('/faixainterprete')
-def getFaixasInterprete():
+def getFaixasInterpretes():
     return
 
 # TODO: GET /faixainterprete/<int:id>
@@ -206,7 +218,7 @@ def getFaixasInterprete(id_faixa, id_interprete):
 
 # TODO: GET: /faixaplaylist
 @app.route('/faixaplaylist')
-def getFaixaPlaylist():
+def getFaixaPlaylists():
     return
 
 # TODO: GET /faixaplaylist/<int:id>
