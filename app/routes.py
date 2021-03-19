@@ -89,7 +89,7 @@ def getAlbum(id):
 
 ## TODO: GET /gravadora
 @app.route('/gravadora')
-def getGravadoras(id):
+def getGravadoras():
     cursor.execute("SELECT * from Gravadora")
     gravadoras = []
     for row in cursor.fetchall():
