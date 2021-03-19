@@ -35,10 +35,10 @@ def getPlaylist(id):
     row = cursor.execute(query, id).fetchone()
     if row:
         return {'nome': row[0], 
-                        'descricao':row[1], 
-                        'PLAYLIST_ID':row[2], 
-                        'data_criacao':row[3], 
-                        'tempo_duracao':row[4]}
+                'descricao':row[1], 
+                'PLAYLIST_ID':row[2], 
+                'data_criacao':row[3], 
+                'tempo_duracao':row[4]}
     return {'message': 'Playlist não encontrada'}, 404
 
 
@@ -57,13 +57,91 @@ def getPlaylists():
 
 
 # DELETE /playlist/<int:id>/delete
-@app.route('/playlist/<int:id>/delete', methods=['POST'])
+@app.route('/playlist/<int:id>', methods=['DELETE'])
 def deletePlaylist(id):
     query = "DELETE FROM Playlist WHERE PLAYLIST_ID=?"
     cursor.execute(query, id)
     cnxn.commit()
 
     return {'message':'Playlist deletada'}
+
+
+# GET /album
+@app.route('/album')
+def getAlbums():
+    cursor.execute("SELECT * from Album")
+    albums = []
+    for row in cursor.fetchall():
+        albums.append({'ALBUM_ID':row[0],
+                        'nome': row[1], 
+                        'descricao':row[2], 
+                        'data_gravacao':row[3], 
+                        'data_compra':row[4], 
+                        'preco_compra':row[5], 
+                        'tipo_compra':row[6], 
+                        'cod_gravadora':row[7]})
+    return jsonify(albums)
+
+
+# ta dando o erro  no getAlbum, getAlbums, getTrack 
+# TypeError: Object of type Decimal is not JSON serializable
+# TypeError: Object of type time is not JSON serializable
+# por causa do preco_compra 
+
+
+# GET /album/<int:id>
+@app.route('/album/<int:id>')
+def getAlbum(id):
+    query = "SELECT * FROM Album WHERE ALBUM_ID=?"
+    row = cursor.execute(query, id).fetchone()
+    if row:
+        return {'ALBUM_ID':row[0],
+                    'nome': row[1], 
+                    'descricao':row[2], 
+                    'data_gravacao':row[3], 
+                    'data_compra':row[4], 
+                    'preco_compra':row[5], 
+                    'tipo_compra':row[6], 
+                    'cod_gravadora':row[7]}
+    return {'message':'Álbum não encontrado'}, 404
+
+
+# GET /gravadora/<int:id>
+@app.route('/gravadora/<int:id>')
+def getGravadora(id):
+    query = "SELECT * FROM Gravadora WHERE GRAVADORA_ID=?"
+    row = cursor.execute(query, id).fetchone()
+    if row:
+        return {'GRAVADORA_ID':row[0],
+                    'endereco': row[1], 
+                    'telefone':row[2], 
+                    'site':row[3], 
+                    'nome':row[4]}
+    return {'message':'Álbum não encontrado'}, 404
+
+
+# GET /track/<int:id>
+@app.route('/track/<int:id>')
+def getTrack(id):
+    query = "SELECT * FROM Faixas WHERE FAIXA_ID=?"
+    row = cursor.execute(query, id).fetchone()
+    if row:
+        return {'FAIXA_ID':row[0],
+                    'album_id': row[1], 
+                    'tipo_composicao':row[2], 
+                    'numero_faixa':row[3], 
+                    'nome':row[4],
+                    'tempo_musical':row[5],
+                    'descricao':row[6],
+                    'tipo_gravacao':row[7],
+                    'duracao':row[8]}
+    return {'message':'Álbum não encontrado'}, 404
+
+# POST play track
+
+
+
+
 
 """
 # POST /playlist/<string:name>/songs {name:, time:}
