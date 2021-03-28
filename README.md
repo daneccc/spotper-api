@@ -2,7 +2,7 @@
 
 ## Como rodar
 
-### [IMPORTANTE] Criar um usuario no Sql Server com user 'sa' e senha 'sa123'
+### [IMPORTANTE] Entrar com  usuario no Sql Server com user 'sa' e senha do seu usuário sa.
 
 ```
 $ cd spotper-api
