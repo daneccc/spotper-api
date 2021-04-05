@@ -16,7 +16,8 @@ def getAlbums():
                                 'data_compra':row[3], 
                                 'preco_compra':(float(row[4])), 
                                 'tipo_compra':row[5], 
-                                'cod_gravadora':row[6]
+                                'cod_gravadora':row[6],
+                
                             }
                         )
     return jsonify(albums)

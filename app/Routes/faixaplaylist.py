@@ -12,11 +12,12 @@ def getFaixasPlaylists():
 
     faixas = []
     for faixa in row:
-        faixas.append({   
-                            'id_playlist': faixa[0],
-                            'id_faixa':faixa[1],
+        faixas.append({     
+                            'id_faixa':faixa[0],
+                            'id_playlist': faixa[1],
                             'n_faixa_tocada': faixa[2],
                             'data_faixa_tocada': faixa[3],
+                            'tempo_total_execucao': faixa[4]
                         }
                     )
 
@@ -31,10 +32,11 @@ def getFaixaByPlaylist(id_Playlist, id_faixa):
         for faixa in row:
             if(faixa.id_faixa == id_faixa):
                 return  {   
-                            'id_playlist': faixa[0],
-                            'id_faixa':faixa[1],
+                            'id_faixa': faixa[0],
+                            'id_playlist':faixa[1],
                             'n_faixa_tocada': faixa[2],
                             'data_faixa_tocada': faixa[3],
+                            
                         }
 
     return {'message':'Erro ao procurar por Faixa ligada a Playlist'}, 404
@@ -49,10 +51,10 @@ def getFaixasByPlaylist(id_Playlist):
     faixas = []
     for faixa in row:
         faixas.append({   
-                            'id_playlist': faixa[0],
-                            'id_faixa':faixa[1],
+                            'id_playlist': faixa[1],
+                            'id_faixa':faixa[0],
                             'n_faixa_tocada': faixa[2],
-                            'data_faixa_tocada': faixa[3],
+                            'data_faixa_tocada': faixa[3]
                         }
                     )
 

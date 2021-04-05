@@ -1,5 +1,5 @@
 SERVER = "localhost"
 DATABASE = "Spot"
 USER = "sa"
-PASSWORD = "sa123"
+PASSWORD = "Admin@123"
 SECRET_KEY = "user"

@@ -8,10 +8,10 @@ def getPlaylists():
     playlists = []                      
     for row in cursor.fetchall():
         playlists.append({
-            'descricao':  row[0],
-            'data_criacao': row[1],
-            'id': row[2],
-            'nome': row[3]
+            'id':  row[0],
+            'nome': row[1],
+            'descricao': row[2],
+            'data_criacao': row[3]
         })
     return jsonify(playlists)
 
