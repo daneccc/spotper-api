@@ -62,8 +62,8 @@ def getFaixasByPlaylist(id_Playlist):
     faixas = []
     for faixa in row:
         faixas.append({   
-                            'id_playlist': faixa[1],
-                            'id_faixa':faixa[0],
+                            'id_playlist':faixa[0],
+                            'id_faixa': faixa[1],
                             'n_faixa_tocada': faixa[2],
                             'data_faixa_tocada': faixa[3],
                             'nome_musica':faixa[4],
