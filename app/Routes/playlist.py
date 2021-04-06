@@ -28,6 +28,7 @@ def getPlaylist(id):
     return {'message': 'Playlist não encontrade'}, 404
 
 
+
 @app.route('/playlist', methods=['POST']) # OK
 def createPlaylist():
     data = request.get_json()

@@ -43,7 +43,18 @@ def getFaixaByPlaylist(id_Playlist, id_faixa):
                     
 @app.route('/faixaplaylist/<int:id_Playlist>') 
 def getFaixasByPlaylist(id_Playlist):
-    query = "SELECT * FROM FaixasPlaylistAux WHERE id_playlist=?"
+
+    query =  """SELECT FaixasPlaylistAux.id_playlist,FaixasPlaylistAux.id_faixa,FaixasPlaylistAux.n_faixa_tocada,FaixasPlaylistAux.data_faixa_tocada,Faixas.nome,Composicao.nome,Compositor.nome,Interprete.nome,Album.nome,Faixas.duracao FROM FaixasPlaylistAux,Faixas,FaixasCompositorAux,Composicao,Compositor,FaixasInterpreteAux,Interprete,Album 
+                WHERE FaixasPlaylistAux.id_faixa = Faixas.id 
+                AND FaixasCompositorAux.id_faixa = Faixas.id
+                AND Composicao.id = Faixas.tipo_composicao
+                AND Compositor.id = FaixasCompositorAux.id_compositor
+                AND FaixasInterpreteAux.id_faixa = Faixas.id
+                AND FaixasInterpreteAux.id_interprete = Interprete.id
+                AND Faixas.album = Album.cod
+                AND id_playlist=?
+                GROUP BY FaixasPlaylistAux.id_playlist,FaixasPlaylistAux.id_faixa,FaixasPlaylistAux.n_faixa_tocada,FaixasPlaylistAux.data_faixa_tocada,Faixas.nome,Composicao.nome,Compositor.nome,Interprete.nome,Album.nome,Composicao.nome,Faixas.duracao
+                ORDER BY FaixasPlaylistAux.id_faixa"""
     row = cursor.execute(query, id_Playlist).fetchall()
     
     if (not row):
@@ -54,7 +65,13 @@ def getFaixasByPlaylist(id_Playlist):
                             'id_playlist': faixa[1],
                             'id_faixa':faixa[0],
                             'n_faixa_tocada': faixa[2],
-                            'data_faixa_tocada': faixa[3]
+                            'data_faixa_tocada': faixa[3],
+                            'nome_musica':faixa[4],
+                            'nome_composicao':faixa[5],
+                            'nome_compositor':faixa[6],
+                            'nome_interprete':faixa[7],
+                            'nome_album':faixa[8],
+                            'duracao_musica':(str(faixa[9]))
                         }
                     )
 
