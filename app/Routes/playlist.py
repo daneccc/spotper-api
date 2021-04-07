@@ -2,16 +2,23 @@ from flask import Flask, jsonify, request, render_template
 from db import cnxn, cursor
 from __main__ import app
 
-@app.route('/playlist') # TODO retornar quantidade de musicas na playlist
+@app.route('/playlist') 
 def getPlaylists():
-    cursor.execute("SELECT * from Playlist")
+    cursor.execute("""
+    SELECT p.id,p.nome,p.descricao,p.data_criacao, COUNT(fp.id_faixa)
+    FROM FaixasPlaylistAux as fp
+    INNER JOIN Playlist as p 
+    ON fp.id_playlist = p.id
+    GROUP BY p.id,p.nome,p.descricao,p.data_criacao,fp.id_playlist
+    """)
     playlists = []                      
     for row in cursor.fetchall():
         playlists.append({
             'id':  row[0],
             'nome': row[1],
             'descricao': row[2],
-            'data_criacao': row[3]
+            'data_criacao': row[3],
+            'num_musicas':row[4]
         })
     return jsonify(playlists)
 
