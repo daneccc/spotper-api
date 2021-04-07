@@ -5,10 +5,13 @@ from __main__ import app
 @app.route('/playlist') 
 def getPlaylists():
     cursor.execute("""
-    SELECT p.id,p.nome,p.descricao,p.data_criacao, COUNT(fp.id_faixa)
+    SELECT p.id,p.nome,p.descricao,p.data_criacao, COUNT(fp.id_faixa),convert(char(8),dateadd(second,SUM ( DATEPART(hh,(convert(datetime,f.duracao,1))) * 3600 +
+    DATEPART(mi, (convert(datetime,f.duracao,1))) * 60 + DATEPART(ss,(convert(datetime,f.duracao,1)))),0),108)
     FROM FaixasPlaylistAux as fp
     INNER JOIN Playlist as p 
     ON fp.id_playlist = p.id
+    INNER JOIN Faixas as f
+    ON fp.id_faixa = f.id
     GROUP BY p.id,p.nome,p.descricao,p.data_criacao,fp.id_playlist
     """)
     playlists = []                      
@@ -18,7 +21,8 @@ def getPlaylists():
             'nome': row[1],
             'descricao': row[2],
             'data_criacao': row[3],
-            'num_musicas':row[4]
+            'num_musicas':row[4],
+            'tempo_total':row[5]
         })
     return jsonify(playlists)
 
