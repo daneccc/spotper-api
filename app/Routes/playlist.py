@@ -42,7 +42,10 @@ def getPlaylist(id):
 
 @app.route('/playlist', methods=['POST']) # OK
 def createPlaylist():
-    data = request.get_json()
+    data = request.form.to_dict()
+    if not(data and data['nome'] and data['descricao']):
+        return "Json vazio",400
+
     playlist = {'nome': data['nome'], 
                 'descricao': data['descricao']}
     query = "INSERT INTO Playlist (nome, descricao, data_criacao) VALUES (?, ?, SYSDATETIME())"
