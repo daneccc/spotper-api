@@ -8,11 +8,12 @@ def getPlaylists():
     SELECT p.id,p.nome,p.descricao,p.data_criacao, COUNT(fp.id_faixa),convert(char(8),dateadd(second,SUM ( DATEPART(hh,(convert(datetime,f.duracao,1))) * 3600 +
     DATEPART(mi, (convert(datetime,f.duracao,1))) * 60 + DATEPART(ss,(convert(datetime,f.duracao,1)))),0),108)
     FROM FaixasPlaylistAux as fp
-    INNER JOIN Playlist as p 
+    RIGHT OUTER JOIN Playlist as p 
     ON fp.id_playlist = p.id
-    INNER JOIN Faixas as f
+    LEFT OUTER JOIN Faixas as f
     ON fp.id_faixa = f.id
     GROUP BY p.id,p.nome,p.descricao,p.data_criacao,fp.id_playlist
+    ORDER BY p.id ASC
     """)
     playlists = []                      
     for row in cursor.fetchall():

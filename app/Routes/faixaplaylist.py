@@ -62,8 +62,8 @@ def getFaixasByPlaylist(id_Playlist):
     faixas = []
     for faixa in row:
         faixas.append({   
-                            'id_faixa':faixa[0],
-                            'id_playlist': faixa[1],
+                            'id_playlist':faixa[0],
+                            'id_faixa': faixa[1],
                             'n_faixa_tocada': faixa[2],
                             'data_faixa_tocada': faixa[3],
                             'nome_musica':faixa[4],
@@ -77,19 +77,23 @@ def getFaixasByPlaylist(id_Playlist):
 
     return jsonify(faixas)
 
-@app.route('/faixaplaylist/<int:id_Playlist>', methods=['POST'])
+##Insere musica em FaixasPlaylistAux
+@app.route('/faixaplaylist/', methods=['POST'])
 def postFaixaPlaylist():
-    data = request.get_json()
+    data = request.form.to_dict()
+    if not(data and data['id_faixa'] and data['id_playlist']):
+        return "Json vazio",400
+        
     faixa = {   
                 'id_faixa': data['id_faixa'], 
                 'id_playlist': data['id_playlist'],
-                'faixa_vezes_tocada': 0,
-                'data_faixa_tocada': None
+                'n_faixa_tocada': 0,
+                'data_faixa_tocada': None,
+                'tempo_total_execucao': '00:00:00'
             }
-    query = "INSERT INTO FaixasPlaylistAux (id_playlist, id_faixa, faixa_vezes_tocada, data_faixa_tocada) VALUES (?, ?, ?, ?)"
-    cursor.execute(query, faixa['id_faixa'], faixa['id_playlist'], faixa['faixa_vezes_tocada'], faixa['data_faixa_tocada'])
+    query = "INSERT INTO FaixasPlaylistAux (id_playlist, id_faixa, n_faixa_tocada, data_faixa_tocada, tempo_total_execucao) VALUES (?, ?, ?, ?, ?)"
+    cursor.execute(query, faixa['id_playlist'], faixa['id_faixa'], faixa['n_faixa_tocada'], faixa['data_faixa_tocada'], faixa['tempo_total_execucao'])
     cnxn.commit()
-
     return jsonify(faixa)
 
 @app.route('/faixaplaylist/<int:id_playlist>/<int:id_faixa>', methods=['DELETE'])
